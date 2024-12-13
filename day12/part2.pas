@@ -109,53 +109,29 @@ end;
 
 function CompteCote(numfig:integer):integer;
 var a,b:Integer;
-
+    nbtmp,na,nb:Byte;
 begin
   CompteCote:=0;
   for b:=0 to hauteur-2 do 
   begin
     for a:=0 to largeur-2 do 
     begin
-        //  ..
-        //  .X
-        if (carte[a+1,b+1].numfigure=numfig) and (carte[a,b].numfigure<>numfig) and (carte[a+1,b].numfigure<>numfig) and (carte[a,b+1].numfigure<>numfig) then CompteCote:=CompteCote+1;
 
-        //  ..
-        //  x.
-        if (carte[a,b+1].numfigure=numfig) and (carte[a+1,b].numfigure<>numfig) and (carte[a+1,b+1].numfigure<>numfig) and (carte[a,b].numfigure<>numfig) then CompteCote:=CompteCote+1;
+      // on scanne sur une matrice de 2x2
+      nbtmp:=0;
+      for nb:=b to b+1 do
+        for na:=a to a+1 do if carte[na,nb].numfigure=numfig then inc(nbtmp);
 
-        //  .X
-        //  ..
-        if (carte[a+1,b].numfigure=numfig) and (carte[a,b].numfigure<>numfig) and (carte[a,b+1].numfigure<>numfig) and (carte[a+1,b+1].numfigure<>numfig) then CompteCote:=CompteCote+1;
+      // si angle rentrant ou sortant
+      // ex:  ..     ou    XX
+      //      .X           X.
 
-        //  X.
-        //  ..
-        if (carte[a,b].numfigure=numfig) and (carte[a+1,b].numfigure<>numfig) and (carte[a,b+1].numfigure<>numfig) and (carte[a+1,b+1].numfigure<>numfig) then CompteCote:=CompteCote+1;
+      if (nbtmp=1) or (nbtmp=3) then inc(CompteCote);
 
-        //  X.
-        //  .X
-        if (carte[a,b].numfigure=numfig) and (carte[a+1,b+1].numfigure=numfig) and (carte[a+1,b].numfigure<>numfig) and (carte[a,b+1].numfigure<>numfig) then CompteCote:=CompteCote+2;
-
-        //  .X
-        //  X.
-        if (carte[a+1,b].numfigure=numfig) and (carte[a,b+1].numfigure=numfig) and (carte[a,b].numfigure<>numfig) and (carte[a+1,b+1].numfigure<>numfig) then CompteCote:=CompteCote+2;
-
-
-        //  X.
-        //  XX
-        if (carte[a,b].numfigure=numfig) and (carte[a+1,b+1].numfigure=numfig) and (carte[a,b+1].numfigure=numfig) and (carte[a+1,b].numfigure<>numfig) then CompteCote:=CompteCote+1;
-
-        //  XX
-        //  .X
-        if (carte[a,b].numfigure=numfig) and (carte[a+1,b+1].numfigure=numfig) and (carte[a+1,b].numfigure=numfig) and (carte[a,b+1].numfigure<>numfig) then CompteCote:=CompteCote+1;
-
-        //  XX
-        //  X.
-        if (carte[a,b].numfigure=numfig) and (carte[a+1,b].numfigure=numfig) and (carte[a,b+1].numfigure=numfig) and (carte[a+1,b+1].numfigure<>numfig) then CompteCote:=CompteCote+1;
-
-        //  .X
-        //  XX
-        if (carte[a,b].numfigure<>numfig) and (carte[a+1,b].numfigure=numfig) and (carte[a,b+1].numfigure=numfig) and (carte[a+1,b+1].numfigure=numfig) then CompteCote:=CompteCote+1;
+        // Cas particulier :
+        //  X.  ou  .X   alors ca compte comme 2 cotes
+        //  .X      X.
+        if ((carte[a,b].numfigure=numfig) and (carte[a+1,b+1].numfigure=numfig) and (carte[a+1,b].numfigure<>numfig) and (carte[a,b+1].numfigure<>numfig)) or ((carte[a+1,b].numfigure=numfig) and (carte[a,b+1].numfigure=numfig) and (carte[a,b].numfigure<>numfig) and (carte[a+1,b+1].numfigure<>numfig)) then CompteCote:=CompteCote+2;
 
     end; 
   end;  
